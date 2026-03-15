@@ -1,8 +1,7 @@
-sky:
+spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    host: localhost
-    port: 3306
-    database: sky_take_out
-    username: root
-    password: root
+    # SQL Server 默认端口是 1433，不是 3306
+    url: jdbc:sqlserver://localhost:1433;databaseName=sky_take_out;encrypt=false;trustServerCertificate=true
+    username: sa  # SQL Server 默认管理员账号通常是 sa
+    password: 123456 # 这里填你安装 SQL Server 时设置的密码
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
