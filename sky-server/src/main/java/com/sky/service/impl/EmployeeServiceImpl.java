@@ -1,16 +1,20 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
+import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import org.checkerframework.checker.nullness.compatqual.NonNullDecl;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -82,5 +87,33 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.insert(employee);
     }
+//   分页查询
+    @Override
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO){
+//        SELECT *
+//FROM Employee
+//ORDER BY id                -- ⚠️ 必须包含 ORDER BY 子句
+//OFFSET 0 ROWS              -- 跳过前 0 行（从第1条开始）
+//FETCH NEXT 10 ROWS ONLY;   -- 只取接下来的 10 行
+//        因为下载了pagehelper这个分页查询插件
+        PageHelper.startPage(employeePageQueryDTO.getPage(),employeePageQueryDTO.getPageSize()) ;
+        Page<Employee>page=employeeMapper.pageQuery(employeePageQueryDTO);
+        long total=page.getTotal();
+        List<Employee>records=page.getResult();
+        return  new PageResult(total,records);
+    }
 
+    @Override
+    public void startorstop(Integer status, long id) {
+
+//        Employee employee=new Employee();
+//        employee.setStatus(status);
+//        employee.setId(id);
+        Employee employee=Employee.builder()
+                        .status(status).id(id).build();
+//        这两个种变成效果都一样，只不过现在的主流是链式编程
+
+        employeeMapper.update(employee);//因为想要在这传入一个动态参数，所以要传入一个实体类
+
+    }
 }
