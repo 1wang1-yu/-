@@ -75,6 +75,7 @@ public class EmployeeController {
     public Result<String> logout() {
         return Result.success();
     }
+
     @PostMapping
     @ApiOperation("新增员工")
     public  Result save(@RequestBody EmployeeDTO employeeDTO){
@@ -100,4 +101,19 @@ public class EmployeeController {
         employeeService.startorstop(status,id);
         return  Result.success();
     }
+ @ GetMapping("/{id}")
+@ApiOperation("根据id查询员工信息")
+    public Result<Employee> getbyId(@PathVariable  Long id){
+        Employee employee=employeeService.getbyId(id);
+
+        return Result.success(employee);
+    }
+//    在这里这所以不使用postmapping是因为他与新增员工信息的路径相同请求方式也相同，路径不知道该访问哪一个就报错了
+    @PutMapping
+    @ApiOperation("编辑员工信息")
+public  Result  update(@RequestBody  EmployeeDTO employeeDTO){
+        log.info("编辑员工信息 {}",employeeDTO);
+        employeeService.update(employeeDTO);
+        return  Result.success();
+}
 }

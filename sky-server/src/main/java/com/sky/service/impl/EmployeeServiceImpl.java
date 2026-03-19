@@ -22,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +32,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeMapper employeeMapper;
+//    @Autowired
+//    private EmployeeService employeeService;
 
     /**
      * 员工登录
@@ -79,12 +82,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         //m默认密码，进行md5加密，不能直接开始设置
         employee.setPassword(DigestUtils.md5Hex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
         //设置当前的创建时间和修改时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-        //设置创建人和修改人
-        //TODO后期改为用户的id
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
+//        //设置创建人和修改人
+//        //TODO后期改为用户的id
+//        employee.setCreateUser(BaseContext.getCurrentId());
+//        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.insert(employee);
     }
 //   分页查询
@@ -114,6 +117,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        这两个种变成效果都一样，只不过现在的主流是链式编程
 
         employeeMapper.update(employee);//因为想要在这传入一个动态参数，所以要传入一个实体类
+
+    }
+    //根据id来查询员工
+    @Override
+    public Employee getbyId(Long id) {
+        Employee employee=employeeMapper.getbyId(id);
+        employee.setPassword("*****");//不想把密码给前端看
+        return employee;
+    }
+    @Transactional
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee=new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+
+//        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.update(employee);
 
     }
 }
