@@ -1,4 +1,4 @@
-package com.sky.controller.admin;
+package com.sky.controller.admin.admin;
 
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.EmployeeDTO;
