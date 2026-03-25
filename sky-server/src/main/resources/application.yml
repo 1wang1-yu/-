@@ -3,28 +3,30 @@ server:
 
 spring:
   profiles:
-    active: dev
+    active: dev # 激活 dev 环境，从而加载上面的变量
   main:
     allow-circular-references: true
 
   datasource:
-      druid:
-        # 1. SQL Server 驱动
-        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-        # 2. SQL Server 连接地址 (注意端口通常是 1433)
-        url: jdbc:sqlserver://localhost:1433;databaseName=sky_take_out;encrypt=false
-        # 3. 账号密码
-        username: sa
-        password: 123456
+    druid:
+      # 引用 db.driver, db.host 等
+      driver-class-name: ${db.driver}
+      url: jdbc:sqlserver://${db.host}:${db.port};databaseName=${db.name};encrypt=false;trustServerCertificate=true
+      username: ${db.user}
+      password: ${db.password}
+
+  redis:
+    host: ${redis.host}
+    port: ${redis.port}
+    database: ${redis.database}
 
 mybatis:
-  #mapper配置文件
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.sky.entity
   configuration:
-    #开启驼峰命名
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 logging:
   level:
     com:
@@ -35,13 +37,14 @@ logging:
 
 sky:
   jwt:
-    # 设置jwt签名加密时使用的秘钥
-    #同时这里这三个本质上是封装了jwtproperties的配置项
-    admin-secret-key: itcast
-    # 设置jwt过期时间
-    admin-ttl: 7200000000
-#    这个所谓的7200000本质上是两分钟，也就说我所设置的这个token只会存在两分钟
-#    所以每一次无论是在接口文档中test,还是项目在执行的时候有一部分并没有执行
-#    基本上都是因为这个所谓的token令牌的问题，大概率是失效了
-    # 设置前端传递过来的令牌名称
+    # 引用 jwt 下的配置
+    admin-secret-key: ${jwt.admin-secret-key}
+    admin-ttl: ${jwt.admin-ttl}
     admin-token-name: token
+
+  alioss:
+    # 引用 aliyun.oss 下的配置
+    endpoint: ${aliyun.oss.endpoint}
+    access-key-id: ${aliyun.oss.access-key-id}
+    access-key-secret: ${aliyun.oss.access-key-secret}
+    bucket-name: ${aliyun.oss.bucket-name}

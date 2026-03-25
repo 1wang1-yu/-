@@ -38,7 +38,7 @@ public class Dish implements Serializable {
 
     //0 停售 1 起售
     private Integer status;
-
+//这些以后不用管了，我已经创建了一个注解用于自动填充公共字段
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
