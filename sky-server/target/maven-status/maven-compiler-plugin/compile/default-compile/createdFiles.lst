@@ -1,0 +1,7 @@
+com\sky\controller\admin\admin\CommonController.class
+com\sky\controller\admin\admin\ShopController.class
+com\sky\controller\admin\user\ShopController.class
+com\sky\controller\admin\admin\CategoryController.class
+com\sky\controller\admin\admin\DishController.class
+com\sky\controller\admin\admin\EmployeeController.class
+com\sky\controller\admin\admin\SetmealController.class

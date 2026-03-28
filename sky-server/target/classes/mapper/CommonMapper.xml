@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.mapper.CommonMapper">
+    <update id="update">
+        update dish
+        <set>
+            <if test="name != null">
+            name = #{name},
+            </if>
+            <if test="categoryId != null">
+            category_id = #{categoryId},
+            </if>
+            <if test="price != null">
+            price = #{price},
+            </if>
+            <if test="image != null">
+            image = #{image},
+            </if>
+            <if test="description != null">
+            description = #{description},
+            </if>
+            <if test="status != null">
+            status = #{status},
+            </if>
+            <!-- 自动填充的字段通常在 Service 层或拦截器中处理，这里也可以手动写 -->
+        </set>
+        where id=#{id}
+    </update>
+
+    <!-- 原有的 SQL 可以放在这里，或者保留注解 -->
+
+    <!-- 分页查询 SQL -->
+    <select id="pageQuery" resultType="com.sky.entity.Dish">
+        SELECT * FROM dish
+        <where>
+            <!-- 动态判断名称 -->
+            <if test="name != null and name != ''">
+                AND name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <!-- 动态判断分类 ID -->
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <!-- 动态判断状态 -->
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+    <select id="list" resultType="Dish" parameterType="Dish">
+        select * from dish
+        <where>
+            <if test="name != null">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+</mapper>
