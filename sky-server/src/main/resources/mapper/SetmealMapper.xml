@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 必须加这两行 DOCTYPE 声明（固定格式，复制即可） -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetmealMapper">
+    <!-- 暂时无SQL，留空即可（但 DOCTYPE 必须有） -->
+
+    <insert id="save" parameterType="Setmeal" useGeneratedKeys="true" keyProperty="id">
+        insert into setmeal
+        (category_id, name, price, status, description, image)
+        values (#{categoryId}, #{name}, #{price}, #{status}, #{description}, #{image})
+    </insert>
+    <!-- 1. 加上 resultType="com.sky.entity.Setmeal" (根据你的实体类包路径调整) -->
+    <!-- 2. 建议把 id="quert" 改为 id="pageQuery"，并同步修改 Java 接口 -->
+    <select id="quert"
+            parameterType="com.sky.dto.SetmealPageQueryDTO"
+            resultType="com.sky.entity.Setmeal">
+
+        SELECT * FROM setmeal
+        <where>
+            <!-- 你的动态 SQL -->
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name}, '%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 必须加这两行 DOCTYPE 声明（固定格式，复制即可） -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.CategoryMapper">
+    <!-- 暂时无SQL，留空即可（但 DOCTYPE 必须有） -->
+    <select id="pageQuery" resultType="com.sky.entity.Category">
+        select  *from  category
+        <where>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name,jdbcType=NVARCHAR},'%')
+            </if>
+        <if test="type!=null and type!=''">
+        and type=#{type}
+
+        </if>
+        </where>
+    </select>
+    <update id="update" parameterType="com.sky.entity.Category">
+        UPDATE category
+        <set>
+            <!-- 只有当 name 不为空时才更新 -->
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <!-- 只有当 type 不为空时才更新 -->
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <!-- 只有当 sort 不为空时才更新 -->
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <!-- 状态通常必传，但也加上判断 -->
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+</mapper>
