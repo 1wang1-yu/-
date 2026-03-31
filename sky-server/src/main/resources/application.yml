@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev # 激活 dev 环境，从而加载上面的变量
+  main:
+    allow-circular-references: true
+
+  datasource:
+    druid:
+      # 引用 db.driver, db.host 等
+      driver-class-name: ${db.driver}
+      url: jdbc:sqlserver://${db.host}:${db.port};databaseName=${db.name};encrypt=false;trustServerCertificate=true
+      username: ${db.user}
+      password: ${db.password}
+
+  redis:
+    host: ${redis.host}
+    port: ${redis.port}
+    database: ${redis.database}
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sky.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    com:
+      sky:
+        mapper: debug
+        service: info
+        controller: info
+
+sky:
+  jwt:
+    # 引用 jwt 下的配置
+    admin-secret-key: ${jwt.admin-secret-key}
+    admin-ttl: ${jwt.admin-ttl}
+    admin-token-name: token
+
+  alioss:
+    # 引用 aliyun.oss 下的配置
+    endpoint: ${aliyun.oss.endpoint}
+    access-key-id: ${aliyun.oss.access-key-id}
+    access-key-secret: ${aliyun.oss.access-key-secret}
+    bucket-name: ${aliyun.oss.bucket-name}
