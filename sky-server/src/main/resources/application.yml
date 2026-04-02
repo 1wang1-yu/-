@@ -41,10 +41,15 @@ sky:
     admin-secret-key: ${jwt.admin-secret-key}
     admin-ttl: ${jwt.admin-ttl}
     admin-token-name: token
-
+    user-secret-key: itheima
+    user-ttl: 720000
+    user-token-name: authentication
   alioss:
     # 引用 aliyun.oss 下的配置
     endpoint: ${aliyun.oss.endpoint}
     access-key-id: ${aliyun.oss.access-key-id}
     access-key-secret: ${aliyun.oss.access-key-secret}
     bucket-name: ${aliyun.oss.bucket-name}
+  wechat:
+    appid: ${sky.wechat.appid}
+    secret: ${sky.wechat.secret}
